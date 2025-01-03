@@ -16,5 +16,21 @@ namespace VetApp.Controllers
         {
             return View();
         }
+        [HttpPost]
+        public IActionResult AddPet(Pet pet)
+        {
+            return View("Wynik", pet);
+        }
+        public IActionResult Wynik(Pet pet)
+        {
+            return View(pet);
+        }
+
+        private readonly PetDbContext _context;
+
+        public AdminController(PetDbContext context)
+        {
+            _context = context;
+        }
     }
 }
