@@ -1,3 +1,7 @@
+
+using Microsoft.EntityFrameworkCore;
+using VetApp.Models;
+
 namespace VetApp
 {
     public class Program
@@ -6,9 +10,16 @@ namespace VetApp
         {
             var builder = WebApplication.CreateBuilder(args);
 
+
+            builder.Services.AddDbContext<PetDbContext>(options =>
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
+
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -28,7 +39,7 @@ namespace VetApp
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+                pattern: "{controller=Admin}/{action=Index}/{id?}");
 
             app.Run();
         }
