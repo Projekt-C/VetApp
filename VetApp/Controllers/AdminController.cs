@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VetApp.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -12,12 +13,13 @@ namespace VetApp.Controllers
         {
             return View();
         }
-
+        [Authorize]
         public IActionResult AddPet()
         {
             return View();
         }
         [HttpPost]
+        [Authorize]
         public IActionResult AddPet([Bind("Id, Name, Species, Breed, IsTaken, DateOfBirth, Reservations")] Pet pet)
         {
             try

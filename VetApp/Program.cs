@@ -1,8 +1,8 @@
 
 using Microsoft.EntityFrameworkCore;
 using VetApp.Models;
+using VetApp.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
-using VetApp.Data;
 
 namespace VetApp
 {
@@ -15,8 +15,8 @@ namespace VetApp
             builder.Services.AddDbContext<PetDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DevConnection")));
 
-            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<UserDbContext>();
-
+            builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddRoles<IdentityRole>().AddEntityFrameworkStores<PetDbContext>();
+                
 
 
             // Add services to the container.

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using VetApp.Areas.Identity.Data;
 
 namespace VetApp.Models
 {
@@ -21,7 +22,7 @@ namespace VetApp.Models
 
         public int UsersId { get; set; }
 
-        public Users Users { get; set; }
+        public User User { get; set; }
 
 
     }
