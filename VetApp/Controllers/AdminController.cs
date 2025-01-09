@@ -9,18 +9,30 @@ namespace VetApp.Controllers
     public class AdminController : Controller
     {
 
+
+        private readonly ILogger<AdminController> _logger;
+
+
+        private readonly PetDbContext _context;
+
+        public AdminController(PetDbContext context)
+        {
+            _context = context;
+        }
+
         public IActionResult Index()
         {
-            return View();
+            var pets = _context.Pets.ToList();
+            return View(pets);
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddPet()
         {
             return View();
         }
         [HttpPost]
-        [Authorize]
-        public IActionResult AddPet([Bind("Id, Name, Species, Breed, IsTaken, DateOfBirth, Reservations")] Pet pet)
+        [Authorize(Roles = "Admin")]
+        public IActionResult AddPet([Bind("Id, Name, Species, Breed, IsTaken, DateOfBirth, Description, Reservations")] Pet pet)
         {
             try
             {
@@ -38,11 +50,11 @@ namespace VetApp.Controllers
             return View(pet);
         }
 
-        private readonly PetDbContext _context;
 
-        public AdminController(PetDbContext context)
+        public IActionResult Error()
         {
-            _context = context;
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

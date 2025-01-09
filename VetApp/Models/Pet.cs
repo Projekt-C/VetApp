@@ -9,11 +9,13 @@ namespace VetApp.Models
         public int Id { get; set; }
         public string Name { get; set; } 
         public string Species { get; set; }
+
+        public string Description { get; set; }
         public string Breed { get; set; }
 
         public bool IsTaken { get; set; }   
     
-   
+        
         public DateTime DateOfBirth { get; set; } 
 
         public ICollection<Reservation> Reservations { get; set; }
