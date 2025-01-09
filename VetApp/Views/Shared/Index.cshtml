@@ -16,6 +16,10 @@
                             <small class="text-muted">Data urodzenia @pet.DateOfBirth</small>
                             <small class="text-muted">Rasa @pet.Breed</small>
                         </div>
+                        @if (!User.IsInRole("Taken"))
+                        {
+                            <button> <a asp-action="Reserve" asp-route-id="@pet.Id">Rezerwacje</a></button>
+                        }
                     </div>
                 </div>
             </div>

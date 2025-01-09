@@ -64,6 +64,13 @@ namespace VetApp.Controllers
             return View(pet);
         }
 
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "User")]
+        public IActionResult Reserve(Pet pet)
+        {
+           return View(pet);
+        }
+
         [HttpGet("status")]
         public IActionResult Error()
         {
