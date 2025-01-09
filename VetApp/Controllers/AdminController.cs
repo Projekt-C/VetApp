@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using VetApp.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VetApp.Controllers
 {
@@ -17,9 +18,18 @@ namespace VetApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult AddPet(Pet pet)
+        public IActionResult AddPet([Bind("Id, Name, Species, Breed, IsTaken, DateOfBirth, Reservations")] Pet pet)
         {
-            return View("Wynik", pet);
+            try
+            {
+                _context.Pets.Add(pet);
+                _context.SaveChanges();
+                return View("Wynik", pet);
+            }
+            catch
+            {
+                return View(pet);
+            }
         }
         public IActionResult Wynik(Pet pet)
         {
