@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using VetApp.Models;
 
@@ -11,9 +12,11 @@ using VetApp.Models;
 namespace VetApp.Migrations
 {
     [DbContext(typeof(PetDbContext))]
-    partial class PetDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250109151647_changed reservation model")]
+    partial class changedreservationmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -292,7 +295,10 @@ namespace VetApp.Migrations
                     b.Property<DateOnly>("Time")
                         .HasColumnType("date");
 
-                    b.Property<string>("UserId")
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId1")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -300,7 +306,7 @@ namespace VetApp.Migrations
 
                     b.HasIndex("PetId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Reservations");
                 });
@@ -366,7 +372,7 @@ namespace VetApp.Migrations
 
                     b.HasOne("VetApp.Areas.Identity.Data.User", "User")
                         .WithMany("Reservations")
-                        .HasForeignKey("UserId")
+                        .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

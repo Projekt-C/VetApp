@@ -14,7 +14,7 @@ namespace VetApp.Models
         public bool IsTaken { get; set; }   
     
         
-        public DateTime DateOfBirth { get; set; } 
+        public DateOnly DateOfBirth { get; set; } 
 
         public string ImageUrl { get; set; }
 

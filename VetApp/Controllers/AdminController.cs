@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using NuGet.Protocol;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Claims;
 using System.Text.Json;
 using VetApp.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -64,11 +65,28 @@ namespace VetApp.Controllers
             return View(pet);
         }
 
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "User")]
-        public IActionResult Reserve(Pet pet)
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult Reserve()
         {
-           return View(pet);
+           return View();
+        }
+        [HttpPost]
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult Reserve([Bind("Id, Date, Time, PetId, UserId")]Reservation reservation, [FromRoute] int petid)
+        {
+            try
+            {
+                string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                reservation.PetId = petid;
+                reservation.UserId = userId;
+                _context.Reservations.Add(reservation);
+                _context.SaveChanges();
+                return View("Wynik", reservation);
+                }
+            catch
+            { 
+                return View("AddPet");
+            }
         }
 
         [HttpGet("status")]
