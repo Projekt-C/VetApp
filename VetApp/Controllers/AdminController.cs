@@ -1,13 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using NuGet.Protocol;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
-using System.Text.Json;
 using VetApp.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace VetApp.Controllers
 {
@@ -49,7 +46,7 @@ namespace VetApp.Controllers
         {
             try
             {
-                pet.ImageUrl = kutas(pet.Breed);
+                pet.ImageUrl = Kutas(pet.Breed);
                 //pet.ImageUrl = $"https://dog.ceo/api/breed/{pet.Breed.ToLower()}/images/random";
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
@@ -70,14 +67,15 @@ namespace VetApp.Controllers
         {
            return View();
         }
-        [HttpPost]
+
+        [HttpPost("Admin/Reserve/{petId}")]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult Reserve([Bind("Id, Date, Time, PetId, UserId")]Reservation reservation, [FromRoute] int petid)
+        public IActionResult Reserve([Bind("Id, Date, Time, PetId, UserId")] Reservation reservation, [FromRoute] int petId)
         {
             try
             {
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                reservation.PetId = petid;
+                reservation.PetId = petId;
                 reservation.UserId = userId;
                 _context.Reservations.Add(reservation);
                 _context.SaveChanges();
@@ -95,7 +93,7 @@ namespace VetApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public string kutas(string breed)
+        public string Kutas(string breed)
         {
             using (WebClient client = new WebClient())
             {

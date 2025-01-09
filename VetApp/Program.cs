@@ -1,4 +1,3 @@
-
 using Microsoft.EntityFrameworkCore;
 using VetApp.Models;
 using VetApp.Areas.Identity.Data;

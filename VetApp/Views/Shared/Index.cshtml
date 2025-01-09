@@ -18,7 +18,9 @@
                         </div>
                         @if (!User.IsInRole("Taken"))
                         {
-                            <button> <a asp-action="Reserve" asp-route-petid="@pet.Id">Rezerwacje</a></button>
+                            <button>
+                                <a asp-action="Reserve" asp-route-petId="@pet.Id">Rezerwacje</a>
+                            </button>
                         }
                     </div>
                 </div>
