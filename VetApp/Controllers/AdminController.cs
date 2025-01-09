@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using NuGet.Protocol;
 using System.Diagnostics;
+using System.Net;
+using System.Text.Json;
 using VetApp.Models;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -8,12 +12,20 @@ namespace VetApp.Controllers
 {
     public class AdminController : Controller
     {
+        
+        public class UrlResponse
+        {
+           public string message { get; set; }
+            public string status { get; set; }
+        }
 
 
         private readonly ILogger<AdminController> _logger;
 
 
         private readonly PetDbContext _context;
+
+   
 
         public AdminController(PetDbContext context)
         {
@@ -32,10 +44,12 @@ namespace VetApp.Controllers
         }
         [HttpPost]
         [Authorize(Roles = "Admin")]
-        public IActionResult AddPet([Bind("Id, Name, Species, Breed, IsTaken, DateOfBirth, Description, Reservations")] Pet pet)
+        public IActionResult AddPet([Bind("Id, Name, Breed, IsTaken, DateOfBirth, Description, ImageUrl, Reservations")] Pet pet)
         {
             try
             {
+                pet.ImageUrl = kutas(pet.Breed);
+                //pet.ImageUrl = $"https://dog.ceo/api/breed/{pet.Breed.ToLower()}/images/random";
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
                 return View("Wynik", pet);
@@ -50,11 +64,21 @@ namespace VetApp.Controllers
             return View(pet);
         }
 
-
+        [HttpGet("status")]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
+        public string kutas(string breed)
+        {
+            using (WebClient client = new WebClient())
+            {
+                string s = client.DownloadString($"https://dog.ceo/api/breed/{breed.ToLower()}/images/random");
+                var data = JsonConvert.DeserializeObject<UrlResponse>(s);
+                return data.message;
+            }
+        }
     }
 }
+
