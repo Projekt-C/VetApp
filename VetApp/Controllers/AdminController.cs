@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
+using VetApp.Areas.Identity.Data;
 using VetApp.Models;
 
 namespace VetApp.Controllers
@@ -22,12 +24,16 @@ namespace VetApp.Controllers
 
 
         private readonly PetDbContext _context;
+        private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-   
 
-        public AdminController(PetDbContext context)
+
+        public AdminController(PetDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Index()
@@ -77,6 +83,7 @@ namespace VetApp.Controllers
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 reservation.PetId = petId;
                 reservation.UserId = userId;
+                _userManager.AddToRoleAsync(_context.Users.Find(userId), "Taken");
                 _context.Pets.Find(petId).IsTaken = true;
                 _context.Reservations.Add(reservation);
                 _context.SaveChanges();

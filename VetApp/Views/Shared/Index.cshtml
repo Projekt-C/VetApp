@@ -6,7 +6,7 @@
     <div class="row">
         @foreach (var pet in Model)
         {
-            if (!pet.IsTaken)
+            @if (!pet.IsTaken)
             {
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
