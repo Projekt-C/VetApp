@@ -31,7 +31,7 @@
                             @if (User.IsInRole("Admin"))
                             {
                               <button>
-                                <a asp-action="DeletePet" asp-route-RmPetId="@pet.Id">X</a>
+                                <a asp-action="DeletePet" asp-route-petId="@pet.Id">X</a>
                               </button>
                             }
                     </div>
