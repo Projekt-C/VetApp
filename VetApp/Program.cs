@@ -57,7 +57,6 @@ namespace VetApp
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
                 }
-         
             }
 
 

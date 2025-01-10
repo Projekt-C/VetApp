@@ -17,15 +17,60 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-bottom: 60px;
+.navbar-brand {
+    color: transparent;
+    background-image: linear-gradient(110deg,#fbf573, #04a282,#20a7f9)!important;
+    -webkit-background-clip: text;
+}
+.nav-link {
+    color: #fefee4 !important;
+}
+.form-control {
+    background-color: transparent;
+    color: #fefee4;
+}
+.form-control:focus{
+    background-color: inherit!important;
+    color: inherit!important;
+}
+.btn-primary {
+    background-color: #fbf573c4;
+    border: none;
+}
+.badge{
+    padding: 0!important;
 }
 
+.information-text{
+    margin:10px 0;
+}
+btn-primary:hover {
+    border: none;
+}
+input:active {
+    background-color: inherit;
+    color: inherit
+}
+.navbar-brand:hover{
+    text-decoration: none;
+    color: transparent;
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: #332;
+    color: #fefee4;
+}
+
+header {
+    background-color: #332!important;
+}
 .card {
     margin: 10px;
     padding: 15px;
     border-radius: 10px;
-    background-color: #f9f9f9;
+    background-color: #04a2822a;
+    
 }
 
     .card img {
@@ -42,4 +87,14 @@ body {
 
 .card-text {
     font-size: 1rem;
+}
+
+.btn > a{
+    text-decoration: none;
+    /*font-weight: bold;*/
+    color: inherit;
+}
+
+.btn > a:hover{
+    color: inherit;
 }
