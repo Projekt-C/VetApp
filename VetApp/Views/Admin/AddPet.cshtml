@@ -28,7 +28,7 @@
                 <datalist id="breeds">
                     @foreach (var breed in ViewBag.Breeds)
                     {
-                        <option value="@breed"></option>
+                        <option value="@(char.ToUpper(breed[0]) + breed.Substring(1))"></option>
                     }
                 </datalist>
             </div>
