@@ -82,6 +82,20 @@ namespace VetApp.Controllers
             return View(pet);
         }
 
+        [HttpGet]
+        public IActionResult DeletePet(Pet pet)
+        {
+            return View(pet);
+        }
+
+        [HttpPost("Admin/DeletePet/{petId}")]
+        public IActionResult DeleteConfirmed([FromRoute] int petId)
+        {
+            _context.Pets.Remove(_context.Pets.FirstOrDefault(p => p.Id == petId));
+            _context.SaveChanges();
+            return View("Index");
+        }
+
         [Authorize(Roles = "Admin,User")]
         public IActionResult Reserve()
         {
