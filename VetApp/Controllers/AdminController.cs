@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using VetApp.Areas.Identity.Data;
+using VetApp.Migrations;
 using VetApp.Models;
 
 namespace VetApp.Controllers
@@ -66,19 +67,55 @@ namespace VetApp.Controllers
         {
             try
             {
-                pet.ImageUrl = Kutas(pet.Breed);
+                pet.ImageUrl = GenerateImage(pet.Breed);
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
+                ViewBag.Result = "Dodano nowego pupila";
                 return View("Wynik", pet);
             }
             catch
             {
+                ViewBag.Result = "Nie udało się dodać nowego pupila";
                 return View(pet);
             }
         }
         public IActionResult Wynik(Pet pet)
         {
             return View(pet);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeletePet()
+        {
+            return View();
+        }
+
+        [HttpPost("Admin/DeletePet/{petId}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult DeletePet(int petId)
+        {
+            var pet = _context.Pets.FirstOrDefault(p => p.Id == petId);
+            _context.Pets.Remove(pet);
+            _context.SaveChanges();
+            ViewBag.Result = "Usunięto pupila";
+            return View("Wynik");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditPet()
+        {
+            return View();
+        }
+        [HttpPost("Admin/EditPet/{petId}")]
+        [Authorize(Roles = "Admin")]
+        public IActionResult EditPet([Bind("Id, Name, Breed, IsTaken, DateOfBirth, Description, ImageUrl, Reservations")] Pet pet, int petId)
+        {
+            var oldPet = _context.Pets.Find(petId);
+            oldPet.Name = pet.Name;
+            oldPet.Description = pet.Description;
+            _context.SaveChanges();
+            ViewBag.Result = "Zaktualizowano dane pupila";
+            return View("Wynik");
         }
 
         [Authorize(Roles = "Admin,User")]
@@ -100,11 +137,13 @@ namespace VetApp.Controllers
                 _context.Pets.Find(petId).IsTaken = true;
                 _context.Reservations.Add(reservation);
                 _context.SaveChanges();
-                return View("Wynik", reservation);
+                ViewBag.Result = "Rezerwacja zakończona pomyślnie";
+                return View("Wynik");
                 }
             catch
             { 
-                return View("AddPet");
+                ViewBag.Result = "Rezerwacja nie powiodła się";
+                return View("Wynik");
             }
         }
 
@@ -114,7 +153,9 @@ namespace VetApp.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public string Kutas(string breed)
+     
+
+        public string GenerateImage(string breed)
         {
             using (WebClient client = new WebClient())
             {
