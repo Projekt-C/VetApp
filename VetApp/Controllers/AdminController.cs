@@ -67,7 +67,6 @@ namespace VetApp.Controllers
             try
             {
                 pet.ImageUrl = Kutas(pet.Breed);
-                //pet.ImageUrl = $"https://dog.ceo/api/breed/{pet.Breed.ToLower()}/images/random";
                 _context.Pets.Add(pet);
                 _context.SaveChanges();
                 return View("Wynik", pet);
