@@ -6,7 +6,7 @@
     <div class="row">
         @foreach (var pet in Model)
         {
-            @if (!pet.IsTaken)
+            @if (!pet.IsTaken || User.IsInRole("Admin"))
             {
             <div class="col-md-4">
                 <div class="card mb-4 shadow-sm">
@@ -17,6 +17,10 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <small class="text-muted">Data urodzenia @pet.DateOfBirth</small>
                             <small class="text-muted">Rasa @pet.Breed</small>
+                            @if (pet.IsTaken && User.IsInRole("Admin"))
+                            {
+                                <span style="color:red" class="badge badge-info">Zajęty</span>
+                            }
                         </div>
                         @if (!User.IsInRole("Taken"))
                         {
@@ -24,6 +28,12 @@
                                 <a asp-action="Reserve" asp-route-petId="@pet.Id">Rezerwacje</a>
                             </button>
                         }
+                            @if (User.IsInRole("Admin"))
+                            {
+                              <button>
+                                <a asp-action="Reserve" asp-route-petId="@pet.Id">X</a>
+                              </button>
+                            }
                     </div>
                 </div>
             </div>

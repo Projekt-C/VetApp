@@ -19,6 +19,12 @@ namespace VetApp.Controllers
             public string status { get; set; }
         }
 
+        public class AllPetResponse
+        {
+            public Dictionary<string, List<string>> message { get; set; }
+            public string status { get; set; }
+        }
+
 
         private readonly ILogger<AdminController> _logger;
 
@@ -42,8 +48,16 @@ namespace VetApp.Controllers
             return View(pets);
         }
         [Authorize(Roles = "Admin")]
+        [HttpGet]
         public IActionResult AddPet()
         {
+            string json;
+            using (WebClient client = new WebClient())
+            {
+                json = client.DownloadString("https://dog.ceo/api/breeds/list/all");
+            }
+            var data = JsonConvert.DeserializeObject<AllPetResponse>(json);
+            ViewBag.Breeds = data.message.Keys;
             return View();
         }
         [HttpPost]

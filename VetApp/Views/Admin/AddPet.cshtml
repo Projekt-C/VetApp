@@ -1,5 +1,7 @@
-﻿@model VetApp.Models.Pet
-
+﻿@using System.Net
+@using Newtonsoft.Json
+@using static VetApp.Controllers.AdminController
+@model VetApp.Models.Pet
 @{
     ViewData["Title"] = "AddPet";
 }
@@ -22,7 +24,13 @@
             </div>
             <div class="form-group">
                 <label asp-for="Breed" class="control-label"></label>
-                <input asp-for="Breed" class="form-control" />
+                <input asp-for="Breed" class="form-control" list="breeds"/>
+                <datalist id="breeds">
+                    @foreach (var breed in ViewBag.Breeds)
+                    {
+                        <option value="@breed"></option>
+                    }
+                </datalist>
             </div>
             <div class="form-group">
                 <label asp-for="DateOfBirth" class="control-label"></label>
