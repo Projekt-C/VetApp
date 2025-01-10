@@ -11,19 +11,10 @@ namespace VetApp.Areas.Identity.Data;
 public class User : IdentityUser
 {
     public int Id { get; set; }
-
-
     public string Name { get; set; }
-
     public string Email { get; set; }
-
     public string Password { get; set; }
-
-    public bool IsAdmin { get; set; }
-
     public string Phone { get; set; }
-
-
     public ICollection<Reservation> Reservations { get; set; }
 }
 

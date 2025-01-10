@@ -21,7 +21,6 @@ namespace VetApp.Models
             builder.Property(x => x.Name).HasMaxLength(255);
             builder.Property(x => x.Email).HasMaxLength(255);
             builder.Property(x => x.Password).HasMaxLength(255);
-            builder.Property(x => x.IsAdmin).HasMaxLength(255);
             builder.Property(x => x.Phone).HasMaxLength(255);
             builder.Property(x => x.Reservations).HasMaxLength(255);
         }

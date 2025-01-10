@@ -77,6 +77,7 @@ namespace VetApp.Controllers
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 reservation.PetId = petId;
                 reservation.UserId = userId;
+                _context.Pets.Find(petId).IsTaken = true;
                 _context.Reservations.Add(reservation);
                 _context.SaveChanges();
                 return View("Wynik", reservation);
