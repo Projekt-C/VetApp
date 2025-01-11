@@ -134,6 +134,7 @@ namespace VetApp.Controllers
                 reservation.PetId = petId;
                 reservation.UserId = userId;
                 _userManager.AddToRoleAsync(_context.Users.Find(userId), "Taken");
+                _context.SaveChanges();
                 _context.Pets.Find(petId).IsTaken = true;
                 _context.Reservations.Add(reservation);
                 _context.SaveChanges();
