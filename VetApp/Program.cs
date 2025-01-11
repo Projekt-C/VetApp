@@ -48,6 +48,7 @@ namespace VetApp
 
             using (var scope = app.Services.CreateScope())
             {
+                var services = scope.ServiceProvider;
                 var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
                 var roles = new[] {"Admin", "User", "Taken"};
                 foreach (var role in roles)
@@ -57,7 +58,42 @@ namespace VetApp
                         await roleManager.CreateAsync(new IdentityRole(role));
                     }
                 }
+                await CreateAdminUser(services);
+
             }
+
+            async Task CreateAdminUser(IServiceProvider serviceProvider)
+            {
+                var userManager = serviceProvider.GetRequiredService<UserManager<User>>();
+
+                // Check if the user exists
+                var adminEmail = "admin@example.com";
+                var adminPassword = "Admin123!.";
+                var phone = "123456789";
+                var name = "Admin"; 
+                var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+                if (adminUser == null)
+                {
+                    // Create the user
+                    var newAdmin = new User
+                    {
+                        UserName = adminEmail,
+                        Name = name,
+                        Email = adminEmail,
+                        Phone = phone,
+                        Password = adminPassword
+                    };
+                    var result = await userManager.CreateAsync(newAdmin, adminPassword);
+
+                    if (result.Succeeded)
+                    {
+                        // Assign the Admin role
+                        await userManager.AddToRoleAsync(newAdmin, "Admin");
+                    }
+                }
+            }
+
 
 
             app.Run();
