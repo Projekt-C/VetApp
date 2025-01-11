@@ -4,6 +4,12 @@
 @model IEnumerable<VetApp.Models.Pet>
 <div class="container">
     <div class="row">
+        <h1> @if (User.IsInRole("Taken"))
+            {
+                <span class="nav-item" style="color:red">
+                You already have fostered a pet  :)
+                </span>
+            }</h1>
         @foreach (var pet in Model)
         {
             @if (!pet.IsTaken || User.IsInRole("Admin"))

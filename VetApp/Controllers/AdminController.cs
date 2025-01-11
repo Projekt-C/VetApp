@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.Net;
 using System.Security.Claims;
 using VetApp.Areas.Identity.Data;
-using VetApp.Migrations;
 using VetApp.Models;
 
 namespace VetApp.Controllers
@@ -33,14 +32,16 @@ namespace VetApp.Controllers
         private readonly PetDbContext _context;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly SignInManager<User> _signInManager;
 
 
 
-        public AdminController(PetDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
+        public AdminController(PetDbContext context, UserManager<User> userManager, RoleManager<IdentityRole> roleManager, SignInManager<User>signInManager)
         {
             _context = context;
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Index()
@@ -126,18 +127,17 @@ namespace VetApp.Controllers
 
         [HttpPost("Admin/Reserve/{petId}")]
         [Authorize(Roles = "Admin,User")]
-        public IActionResult Reserve([Bind("Id, Date, Time, PetId, UserId")] Reservation reservation, [FromRoute] int petId)
+        public async Task<IActionResult> Reserve([Bind("Id, Date, Time, PetId, UserId")] Reservation reservation, [FromRoute] int petId)
         {
             try
             {
                 string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 reservation.PetId = petId;
                 reservation.UserId = userId;
-                _userManager.AddToRoleAsync(_context.Users.Find(userId), "Taken");
-                _context.SaveChanges();
+                await _userManager.AddToRoleAsync(_context.Users.Find(userId), "Taken");
                 _context.Pets.Find(petId).IsTaken = true;
                 _context.Reservations.Add(reservation);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 ViewBag.Result = "Rezerwacja zakończona pomyślnie";
                 return View("Wynik");
                 }

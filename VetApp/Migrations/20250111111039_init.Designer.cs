@@ -12,8 +12,8 @@ using VetApp.Models;
 namespace VetApp.Migrations
 {
     [DbContext(typeof(PetDbContext))]
-    [Migration("20250109160026_User fix")]
-    partial class Userfix
+    [Migration("20250111111039_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -180,9 +180,6 @@ namespace VetApp.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsAdmin")
                         .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
